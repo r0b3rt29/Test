@@ -1,0 +1,244 @@
+
+<button type="button" class="btn btn-secondary btn-success" (click)="onAdd(form)" data-toggle="modal" data-target="#addUserModal">
+  <i class="fa fa-user-plus" aria-hidden="true"></i>
+  Add user
+</button>
+<br />
+<table class='table table-striped' aria-labelledby="tableLabel">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email Address</th>
+      <th>Password</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.firstName}}</td>
+      <td>{{user.lastName}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.password}}</td>
+      <td>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary btn-info btn-sm" (click)="onView(user)" data-toggle="modal" data-target="#viewModal">
+            <i class="fas fa-eye"></i>
+            View Details
+          </button>
+          <button type="button" class="btn btn-secondary btn-primary btn-sm" (click)="onEdit(user)" data-toggle="modal" data-target="#myModal">
+            <i class="fas fa-edit"></i>
+            Edit
+          </button>
+          <button type="button" class="btn btn-secondary btn-danger btn-sm" (click)="onDelete(user.id)">
+            <i class="fas fa-trash-alt"></i>
+            Delete
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form novalidate #form="ngForm" (ngSubmit)="onUpdate(form)">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">User Update Panel</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="col-form-label">First Name:</label>
+            <input type="text" class="form-control"
+                   placeholder="First Name"
+                   [(ngModel)]="user.firstName"
+                   name="firstName"
+                   #firstName="ngModel">
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Last Name:</label>
+            <input type="text" class="form-control"
+                   placeholder="Last Name"
+                   [(ngModel)]="user.lastName"
+                   name="lastName"
+                   #lastName="ngModel">
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Email:</label>
+            <input type="text" class="form-control"
+                   placeholder="Email"
+                   #email="ngModel"
+                   [(ngModel)]="user.email"
+                   name="email">
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Password:</label>
+            <input type="text" class="form-control"
+                   placeholder="Password"
+                   #password="ngModel"
+                   [(ngModel)]="user.password"
+                   name="password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            Save changes
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">
+            <i class="fa fa-window-close" aria-hidden="true"></i>
+            Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form novalidate #form="ngForm" (ngSubmit)="onUpdate(form)">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">View User's Detail</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="col-form-label">First Name:</label>
+            <input type="text" class="form-control"
+                   placeholder="First Name"
+                   [(ngModel)]="user.firstName"
+                   name="firstName"
+                   #firstName="ngModel" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Last Name:</label>
+            <input type="text" class="form-control"
+                   placeholder="Last Name"
+                   [(ngModel)]="user.lastName"
+                   name="lastName"
+                   #lastName="ngModel" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Email:</label>
+            <input type="text" class="form-control"
+                   placeholder="Email"
+                   #email="ngModel"
+                   [(ngModel)]="user.email"
+                   name="email" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label">Password:</label>
+            <input type="text" class="form-control"
+                   placeholder="Password"
+                   #password="ngModel"
+                   [(ngModel)]="user.password"
+                   name="password" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">
+            <i class="fa fa-window-close" aria-hidden="true"></i>
+            Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    
+    <form #form="ngForm" novalidate (ngSubmit)="createUser(form)">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title">Add User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control"
+                     placeholder="First Name"
+                     [(ngModel)]="formData.firstName"
+                     name="firstName"
+                     #firstName="ngModel"
+                     [disabled]="isFormSubmiting">
+            </div>
+
+            <div *ngIf="isFormSubmittedCreate && (formData.firstName == '' || formData.firstName == null)" class="help-block error-message">
+              First name is required.
+            </div>
+
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]="formData.lastName" name="lastName" #lastName="ngModel"
+                     [disabled]="isFormSubmiting">
+            </div>
+
+            <div *ngIf="isFormSubmittedCreate && (formData.lastName == '' || formData.lastName == null)" class="help-block error-message">
+              Last name is required.
+            </div>
+
+            <div class="input-group mb-4">
+              <input type="text" class="form-control"
+                     placeholder="Email"
+                     #email="ngModel"
+                     [(ngModel)]="formData.email"
+                     name="email"
+                     [disabled]="isFormSubmiting">
+            </div>
+
+            <div *ngIf="isFormSubmittedCreate && (formData.email == '' || formData.email == null)" class="help-block error-message">
+              Email is required.
+            </div>
+
+
+            <div class="input-group mb-3">
+              <input type="password" class="form-control"
+                     placeholder="Password"
+                     #password="ngModel"
+                     [(ngModel)]="formData.password"
+                     name="password"
+                     [disabled]="isFormSubmiting">
+            </div>
+
+            <div *ngIf="isFormSubmittedCreate && (formData.password == '' || formData.password == null)" class="help-block error-message">
+              Password is required.
+            </div>
+            <p class="alert alert-danger" align="left" *ngIf="didSubmitOperationFailed">
+              Something went wrong! Please try again.
+            </p>
+            <div class="progress" *ngIf="isFormSubmiting">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            
+              <button type="submit" class="btn btn-secondary btn-primary" [disabled]="isFormSubmiting">
+                <i class="fas fa-save"></i>
+                Add User
+              </button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()" [disabled]="isFormSubmiting">
+                <i class="fa fa-window-close" aria-hidden="true"></i>
+                Close
+              </button>
+            
+            
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+.has-error input[type="email"],
+.has-error input[type="password"] {
+  color: rgb(230, 14, 14);
+  border: 2px solid red !important
+}
+
+.error-message {
+  color: #E92626;
+  font-size: 16px;
+  font-weight: normal;
+  padding-bottom: 20px;
+}
