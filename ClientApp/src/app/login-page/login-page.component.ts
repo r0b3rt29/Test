@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgForm, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Login } from '../shared/login.model';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../services/auth-service.service';
@@ -15,7 +14,7 @@ export class LoginPageComponent implements OnInit {
 
   public loginModel: Login = new Login();
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private formBuilder: FormBuilder, private authService: AuthServiceService) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private authService: AuthServiceService) { }
 
   ngOnInit() {
 
@@ -23,11 +22,10 @@ export class LoginPageComponent implements OnInit {
   }
 
  
-  public isSubmitted: boolean = false;
-  public hasError: boolean = false;
-  public errorMessage: string = "";
-  public isValidFormSubmitted = null;
 
+  hasError: boolean = false;
+  errorMessage: string = "";
+  isSubmiting: boolean = false;
 
 
   validateForm() {
@@ -46,8 +44,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   login() {
-
-    this.isSubmitted = true;
+    this.isSubmiting = true;
     if (this.validateForm()) {
       this.http.post<string>(this.baseUrl + 'api/Login', this.loginModel).subscribe(result => {
 
@@ -68,7 +65,9 @@ export class LoginPageComponent implements OnInit {
           this.errorMessage = "Username or password is incorrect!";
           console.log("Log in failed!");
         }
+        this.isSubmiting = false;
       }, err => console.log(err));
+
     }
 
     

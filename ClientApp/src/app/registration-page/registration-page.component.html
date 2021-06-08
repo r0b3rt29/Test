@@ -1,8 +1,6 @@
 <div class="container" style="padding-top:40px;">
   <div class="row">
-    <!--<div class="progress">
-      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
-    </div>-->
+
     <div class="col-md-6 mx-auto">
       
       <div class="card mx-4">
@@ -20,35 +18,60 @@
                      [(ngModel)]="formData.firstName"
                      name="firstName"
                      #firstName="ngModel"
-                     [disabled]="isFormSubmiting">
+                     [disabled]="isFormSubmiting"
+                     required
+                     maxlength="100">
             </div>
-
-            <div *ngIf="isFormSubmitted && (formData.firstName == '' || formData.firstName == null)" class="help-block error-message">
-              First name is required.
+            <div *ngIf="firstName.invalid && firstName.touched" class="help-block error-message">
+              <div *ngIf="firstName.errors?.required">
+                First name is required.
+              </div>
+              <div *ngIf="firstName.errors?.maxlength">
+                Maximum characters for first name is 100.
+              </div>
             </div>
 
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]="formData.lastName" name="lastName" #lastName="ngModel"
-                     [disabled]="isFormSubmiting">
+              <input type="text" class="form-control"
+                     placeholder="Last Name"
+                     [(ngModel)]="formData.lastName"
+                     name="lastName"
+                     #lastName="ngModel"
+                     [disabled]="isFormSubmiting"
+                     required
+                     maxlength="100">
             </div>
-
-            <div *ngIf="isFormSubmitted && (formData.lastName == '' || formData.lastName == null)" class="help-block error-message">
-              Last name is required.
+            <div *ngIf="lastName.invalid && lastName.touched" class="help-block error-message">
+              <div *ngIf="lastName.errors?.required">
+                Last name is required.
+              </div>
+              <div *ngIf="firstName.errors?.maxlength">
+                Maximum characters for last name is 100.
+              </div>
             </div>
 
             <div class="input-group mb-4">
-              <input type="text" class="form-control"
+              <input type="email" class="form-control"
                      placeholder="Email"
                      #email="ngModel"
                      [(ngModel)]="formData.email"
                      name="email"
-                     [disabled]="isFormSubmiting">
+                     [disabled]="isFormSubmiting"
+                     required
+                     maxlength="200"
+                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
             </div>
-
-            <div *ngIf="isFormSubmitted && (formData.email == '' || formData.email == null)" class="help-block error-message">
-              Email is required.
+            <div *ngIf="email.invalid && email.touched" class="help-block error-message">
+              <div *ngIf="email.errors?.required">
+                Email address is required.
+              </div>
+              <div *ngIf="email.errors?.maxlength">
+                Maximum characters for email address is 200.
+              </div>
+              <div *ngIf="email.errors?.pattern ">
+                Invalid email address format.
+              </div>
             </div>
-
 
             <div class="input-group mb-3">
               <input type="password" class="form-control"
@@ -56,13 +79,18 @@
                      #password="ngModel"
                      [(ngModel)]="formData.password"
                      name="password"
-                     [disabled]="isFormSubmiting">
+                     [disabled]="isFormSubmiting"
+                     required
+                     maxlength="500">
             </div>
-
-            <div *ngIf="isFormSubmitted && (formData.password == '' || formData.password == null)" class="help-block error-message">
-              Password is required.
+            <div *ngIf="password.invalid && password.touched" class="help-block error-message">
+              <div *ngIf="password.errors?.required">
+                Password is required.
+              </div>
+              <div *ngIf="password.errors?.maxlength">
+                Maximum characters for password is 500.
+              </div>
             </div>
-
 
             <div class="input-group mb-3">
               <input type="password" class="form-control"
@@ -70,14 +98,22 @@
                      #confirmPassword="ngModel"
                      [(ngModel)]="formData.confirmPassword"
                      name="confirmPassword"
-                     [disabled]="isFormSubmiting">
+                     [disabled]="isFormSubmiting"
+                     required
+                     maxlength="500">
             </div>
-
-            <div *ngIf="isFormSubmitted && (formData.confirmPassword == '' || formData.confirmPassword == null)" class="help-block error-message">
-              Confirm password is required.
+            <div *ngIf="confirmPassword.invalid && confirmPassword.touched" class="help-block error-message">
+              <div *ngIf="confirmPassword.errors?.required">
+                Confirm Password is required.
+              </div>
+              <div *ngIf="confirmPassword.errors?.maxlength">
+                Maximum characters for password is 500.
+              </div>
             </div>
-            <div *ngIf="isFormSubmitted && passwordAndConfirmPasswordError" class="help-block error-message">
-              Password and confirm password are not matched.
+            <div *ngIf="confirmPassword.valid" class="help-block error-message">
+              <div *ngIf="formData.confirmPassword != formData.password">
+                Password and confirm password must match.
+              </div>
             </div>
 
             <div>
@@ -88,7 +124,9 @@
                 Something went wrong! Please try again.
               </p>
             </div>
-            <button type="submit" class="btn btn-block btn-info" [disabled]="isFormSubmiting">
+            <button *ngIf="!isFormSubmiting" type="submit" class="btn btn-block"
+                    [disabled]="firstName.invalid || lastName.invalid || email.invalid || password.invalid || confirmPassword.invalid || (formData.confirmPassword != formData.password)"
+                    [ngClass]="{'btn-info': firstName.valid && lastName.valid && email.valid && password.valid && confirmPassword.valid && (formData.confirmPassword == formData.password), 'btn-secondary formInvalid': firstName.invalid || lastName.invalid || email.invalid || password.invalid || confirmPassword.invalid || (formData.confirmPassword != formData.password)}">
               <i class="fa fa-user-plus" aria-hidden="true"></i>
               Create User
             </button>

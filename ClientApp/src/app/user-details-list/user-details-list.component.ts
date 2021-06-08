@@ -23,9 +23,7 @@ export class UserDetailsListComponent implements OnInit {
   passwordAndConfirmPasswordError: boolean = false;
 
   isFormSubmiting: boolean = false;
-  isFormSubmittedCreate: boolean = false;
   didSubmitOperationFailed: boolean = false;
-  isCreateUserSuccessful: boolean = false;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
     this.url = baseUrl + 'api/User';
@@ -38,8 +36,8 @@ export class UserDetailsListComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  onEdit(user: User) {
-
+  onEdit(user: User, formUpdate: NgForm) {
+    formUpdate.form.reset();
     this.user = user;
   }
 
@@ -47,11 +45,12 @@ export class UserDetailsListComponent implements OnInit {
     this.user = user;
   }
 
-  onUpdate(form: NgForm) {
+  onUpdate(formUpdate: NgForm) {
     this.http.put(this.url + '/' + this.user.id, this.user).subscribe(result => {
       if (result) {
+        formUpdate.form.reset();
+        $('#myModal').modal('hide');
         console.log("Update completed!");
-        this.user = new User();
         this.autoPopulate();
       } else {
         console.log("Update failed!");
@@ -87,12 +86,11 @@ export class UserDetailsListComponent implements OnInit {
         if (result) {
           console.log("Successful!");
           this.resetForm(form);
-          this.isCreateUserSuccessful = true;
           this.isFormSubmiting = false;
           this.didSubmitOperationFailed = false;
           this.resetErrors();
           this.autoPopulate();
-
+          $('#addUserModal').modal('hide');
         } else {
           this.isFormSubmiting = false;
           this.didSubmitOperationFailed = true;
@@ -123,7 +121,6 @@ export class UserDetailsListComponent implements OnInit {
     this.confirmPasswordNameError = false;
     this.passwordAndConfirmPasswordError = false;
 
-    this.isFormSubmittedCreate = false;
     this.isFormSubmiting = false;
   }
 
@@ -147,13 +144,7 @@ export class UserDetailsListComponent implements OnInit {
       this.passwordNameError = true;
       result = false;
     }
-    //if ((this.formData.password != '' || this.formData.password == null) && (this.formData.confirmPassword != '' || this.formData.confirmPassword != null)) {
-    //  if (this.formData.password != this.formData.confirmPassword) {
-    //    this.passwordAndConfirmPasswordError = true;
-    //    result = false;
-    //  }
-    //}
-    this.isFormSubmittedCreate = true;
+
     return result;
   }
 

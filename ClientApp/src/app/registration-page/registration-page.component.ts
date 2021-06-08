@@ -19,18 +19,12 @@ export class RegistrationPageComponent implements OnInit {
   isFormSubmiting: boolean = false;
   isFormSubmitted: boolean = false;
 
-  //firstNameErrorMessage: string = "";
-  //lastNameErrorMessage: string = "";
-  //emailNameErrorMessage: string = "";
-  //passwordNameErrorMessage: string = "";
-  confirmPasswordNameErrorMessage: string = "";
 
   firstNameError: boolean = false;
   lastNameError: boolean = false;
   emailNameError: boolean = false;
   passwordNameError: boolean = false;
   confirmPasswordNameError: boolean = false;
-  passwordAndConfirmPasswordError: boolean = false;
 
 
   ngOnInit() {
@@ -41,7 +35,6 @@ export class RegistrationPageComponent implements OnInit {
     this.isFormSubmiting = true;
 
     if (this.validateForm()) {
-      this.passwordAndConfirmPasswordError = false;
       this.http.post(url, this.formData).subscribe(result => {
         if (result) {
           console.log("Successful!");
@@ -98,7 +91,6 @@ export class RegistrationPageComponent implements OnInit {
     }
     if ((this.formData.password != '' || this.formData.password == null) && (this.formData.confirmPassword != '' || this.formData.confirmPassword != null)) {
       if (this.formData.password != this.formData.confirmPassword) {
-        this.passwordAndConfirmPasswordError = true;
         result = false;
       }
     }
@@ -112,16 +104,12 @@ export class RegistrationPageComponent implements OnInit {
   }
 
   resetErrors() {
-    this.confirmPasswordNameErrorMessage = "";
 
     this.firstNameError = false;
     this.lastNameError = false;
     this.emailNameError = false;
     this.passwordNameError = false;
     this.confirmPasswordNameError = false;
-    this.passwordAndConfirmPasswordError = false;
-
-    this.isFormSubmitted = false;
 
   }
 
