@@ -3,6 +3,7 @@ import { User } from '../shared/user.model';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Register } from '../shared/register.model';
+declare var $: any;
 
 @Component({
   selector: 'app-user-details-list',
@@ -12,18 +13,18 @@ import { Register } from '../shared/register.model';
 export class UserDetailsListComponent implements OnInit {
   public users: User[];
   public user: User = new User();
+  thisUnEditedUser: User = new User();
   formData: Register = new Register();
   url: string;
 
-  firstNameError: boolean = false;
-  lastNameError: boolean = false;
-  emailNameError: boolean = false;
-  passwordNameError: boolean = false;
-  confirmPasswordNameError: boolean = false;
+  
+
+ 
   passwordAndConfirmPasswordError: boolean = false;
 
   isFormSubmiting: boolean = false;
   didSubmitOperationFailed: boolean = false;
+  isfetchingUserForEdit: boolean = false;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
     this.url = baseUrl + 'api/User';
@@ -39,6 +40,7 @@ export class UserDetailsListComponent implements OnInit {
   onEdit(user: User, formUpdate: NgForm) {
     formUpdate.form.reset();
     this.user = user;
+    this.thisUnEditedUser = user;
   }
 
   onView(user: User) {
@@ -114,11 +116,7 @@ export class UserDetailsListComponent implements OnInit {
 
   resetErrors() {
 
-    this.firstNameError = false;
-    this.lastNameError = false;
-    this.emailNameError = false;
-    this.passwordNameError = false;
-    this.confirmPasswordNameError = false;
+
     this.passwordAndConfirmPasswordError = false;
 
     this.isFormSubmiting = false;
@@ -129,19 +127,15 @@ export class UserDetailsListComponent implements OnInit {
 
 
     if (this.formData.firstName == '' || this.formData.firstName == null) {
-      this.firstNameError = true;
       result = false;
     }
     if (this.formData.lastName == '' || this.formData.lastName == null) {
-      this.lastNameError = true;
       result = false;
     }
     if (this.formData.email == '' || this.formData.email == null) {
-      this.emailNameError = true;
       result = false;
     }
     if (this.formData.password == '' || this.formData.password == null) {
-      this.passwordNameError = true;
       result = false;
     }
 
@@ -150,6 +144,7 @@ export class UserDetailsListComponent implements OnInit {
 
   closeModal() {
     this.user = new User();
+    this.autoPopulate();
   }
 
   ngOnInit() {
